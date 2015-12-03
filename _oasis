@@ -74,11 +74,9 @@ Library async_ssl_bindings
   Modules:            Ffi_bindings
   BuildDepends:       ctypes,
                       ctypes.stubs,
-                      ctypes.foreign.threaded,
                       threads
   XMETARequires:      ctypes,
                       ctypes.stubs,
-                      ctypes.foreign.threaded,
                       threads
 
 Executable ffi_stubgen
