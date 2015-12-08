@@ -1,6 +1,17 @@
 (* OASIS_START *)
 (* OASIS_STOP *)
 
+let is_osx =
+  lazy ("uname" |> Ocamlbuild_plugin.run_and_read |> String.trim = "Darwin")
+
+let homebrew_ssl =
+  let path = "/usr/local/opt/openssl/include" in
+  lazy (
+    if Sys.is_directory path
+    then path
+    else failwith ("openssl isn't installed in: " ^ path)
+  )
+
 let dispatch = function
   | After_rules ->
     let stubgen          = "stubgen/ffi_stubgen.byte" in
@@ -27,9 +38,13 @@ let dispatch = function
          let cc = BaseEnvLight.var_get "bytecomp_c_compiler" env in
          let stdlib = BaseEnvLight.var_get "standard_library" env in
          let ctypes = BaseEnvLight.var_get "pkg_ctypes" env in
-         Cmd (S [Sh cc; A"stubgen/ffi_ml_types_stubgen.c";
-                 A"-I"; P ctypes; A"-I"; P stdlib;
-                 A"-o"; A stubgen_ml_types])
+         let args =
+           ref [Sh cc; A"stubgen/ffi_ml_types_stubgen.c";
+            A"-I"; P ctypes; A"-I"; P stdlib] in
+         if Lazy.force is_osx
+         then args := !args @ [A"-I"; P (Lazy.force homebrew_ssl)];
+         args := !args @ [A"-o"; A stubgen_ml_types];
+         Cmd (S !args)
       );
 
     rule "generated-types ml"
