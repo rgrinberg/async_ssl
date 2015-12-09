@@ -115,8 +115,8 @@ module Ssl_ctx = struct
         match ver with
         | V.Sslv3  -> Bindings.sslv3_method  ()
         | V.Tlsv1  -> Bindings.tlsv1_method  ()
-        | V.Tlsv1_1 -> Bindings.tlsv1_1_method ()
-        | V.Tlsv1_2 -> Bindings.tlsv1_2_method ()
+        | V.Tlsv1_1 -> failwith "Tlsv1_1 is disabled on OSX + homebrew"
+        | V.Tlsv1_2 -> failwith "Tlsv1_2 is disabled on OSX + homebrew"
         | V.Sslv23 -> Bindings.sslv23_method ()
       in
       match Bindings.Ssl_ctx.new_ ver_method with
@@ -263,8 +263,8 @@ module Ssl = struct
         match version with
         | Sslv3  -> Bindings.sslv3_method ()
         | Tlsv1  -> Bindings.tlsv1_method ()
-        | Tlsv1_1 -> Bindings.tlsv1_1_method ()
-        | Tlsv1_2 -> Bindings.tlsv1_2_method ()
+        | Tlsv1_1 -> failwith "Tlsv1_1 is disabled on OSX + homebrew"
+        | Tlsv1_2 -> failwith "Tlsv1_2 is disabled on OSX + homebrew"
         | Sslv23 -> Bindings.sslv23_method ()
       in
       match Bindings.Ssl.set_method t version_method with

@@ -65,8 +65,9 @@ struct
   let ssl_method_t  = Ctypes.(void @-> returning (ptr void))
   let sslv3_method  = foreign "SSLv3_method" ssl_method_t
   let tlsv1_method  = foreign "TLSv1_method" ssl_method_t
-  let tlsv1_1_method  = foreign "TLSv1_1_method" ssl_method_t
-  let tlsv1_2_method  = foreign "TLSv1_2_method" ssl_method_t
+  (* Broken on homebrew's openssl. Should be enabled conditionally somehow *)
+  (* let tlsv1_1_method  = foreign "TLSv1_1_method" ssl_method_t *)
+  (* let tlsv1_2_method  = foreign "TLSv1_2_method" ssl_method_t *)
   let sslv23_method = foreign "SSLv23_method" ssl_method_t
   (* SSLv2 isn't secure, so we don't use it.  If you really really really need it, use
      SSLv23 which will at least try to upgrade the security whenever possible.
